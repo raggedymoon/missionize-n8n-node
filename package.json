@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-missionize",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "N8N community node for Missionize AI governance -- intercept, govern, and cryptographically seal AI agent decisions.",
   "keywords": [
     "n8n-community-node-package",
