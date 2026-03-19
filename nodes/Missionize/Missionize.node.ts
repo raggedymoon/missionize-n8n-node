@@ -24,14 +24,12 @@ export class Missionize implements INodeType {
 			},
 		],
 		properties: [
-			// Resource (hidden, single resource for v1)
 			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'hidden',
 				default: 'agent',
 			},
-			// Operation
 			{
 				displayName: 'Operation',
 				name: 'operation',
@@ -150,9 +148,7 @@ export class Missionize implements INodeType {
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
 		const credentials = await this.getCredentials('missionizeApi');
-
 		const baseUrl = ((credentials.baseUrl as string) || 'https://api.missionize.ai').replace(/\/+$/, '');
-		const apiKey = credentials.apiKey as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
 		for (let i = 0; i < items.length; i++) {
@@ -163,13 +159,17 @@ export class Missionize implements INodeType {
 					let metadata = {};
 					try { metadata = JSON.parse(metadataStr); } catch { metadata = {}; }
 
-					const response = await this.helpers.httpRequest({
-						method: 'POST',
-						url: `${baseUrl}/api/agent/sessions`,
-						headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
-						body: { agent_id: agentId, metadata },
-						json: true,
-					});
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'missionizeApi',
+						{
+							method: 'POST',
+							url: `${baseUrl}/api/agent/sessions`,
+							headers: { 'Content-Type': 'application/json' },
+							body: { agent_id: agentId, metadata },
+							json: true,
+						},
+					);
 
 					returnData.push({ json: response });
 
@@ -182,20 +182,23 @@ export class Missionize implements INodeType {
 					let toolInput = {};
 					try { toolInput = JSON.parse(toolInputStr); } catch { toolInput = {}; }
 
-					const response = await this.helpers.httpRequest({
-						method: 'POST',
-						url: `${baseUrl}/api/agent/intercept`,
-						headers: { 'X-API-Key': apiKey, 'Content-Type': 'application/json' },
-						body: {
-							session_id: sessionId,
-							agent_id: agentId,
-							tool_name: toolName,
-							tool_input: toolInput,
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'missionizeApi',
+						{
+							method: 'POST',
+							url: `${baseUrl}/api/agent/intercept`,
+							headers: { 'Content-Type': 'application/json' },
+							body: {
+								session_id: sessionId,
+								agent_id: agentId,
+								tool_name: toolName,
+								tool_input: toolInput,
+							},
+							json: true,
 						},
-						json: true,
-					});
+					);
 
-					// Normalized output for downstream Switch node
 					const normalized: { [key: string]: string | boolean | number | null | object } = {
 						decision: response.decision ?? null,
 						reason: response.reason ?? null,
@@ -214,12 +217,15 @@ export class Missionize implements INodeType {
 				} else if (operation === 'getSessionTimeline') {
 					const sessionId = this.getNodeParameter('timelineSessionId', i) as string;
 
-					const response = await this.helpers.httpRequest({
-						method: 'GET',
-						url: `${baseUrl}/api/agent/sessions/${sessionId}`,
-						headers: { 'X-API-Key': apiKey },
-						json: true,
-					});
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'missionizeApi',
+						{
+							method: 'GET',
+							url: `${baseUrl}/api/agent/sessions/${sessionId}`,
+							json: true,
+						},
+					);
 
 					returnData.push({ json: response });
 				}
