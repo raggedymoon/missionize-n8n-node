@@ -1,0 +1,46 @@
+{
+  "name": "n8n-nodes-missionize",
+  "version": "1.0.2",
+  "description": "N8N community node for Missionize AI governance -- intercept, govern, and cryptographically seal AI agent decisions.",
+  "keywords": [
+    "n8n-community-node-package",
+    "ai-governance",
+    "missionize"
+  ],
+  "license": "MIT",
+  "homepage": "https://missionize.ai",
+  "author": {
+    "name": "Adrian Bailey",
+    "email": "adrian@missionize.ai",
+    "url": "https://missionize.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raggedymoon/missionize-n8n-node.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "copyfiles -u 2 \"nodes/**/*.png\" dist/",
+    "dev": "tsc --watch",
+    "lint": "eslint nodes credentials --ext .ts"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/MissionizeApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Missionize/Missionize.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "copyfiles": "^2.4.1",
+    "n8n-workflow": "^2.13.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

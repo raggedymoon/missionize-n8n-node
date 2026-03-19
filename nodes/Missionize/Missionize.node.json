@@ -1,0 +1,14 @@
+{
+  "node": "n8n-nodes-missionize.missionize",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Development"],
+  "subcategories": {
+    "Development": ["AI Governance"]
+  },
+  "resources": {
+    "primaryDocumentation": [
+      { "url": "https://missionize.ai" }
+    ]
+  }
+}

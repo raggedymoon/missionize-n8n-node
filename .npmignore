@@ -1,0 +1,29 @@
+# Source files - exclude from npm package
+nodes/**/*.ts
+credentials/**/*.ts
+tsconfig.json
+.eslintrc.js
+
+# Environment and secrets - NEVER publish these
+.env
+.env.*
+*.env
+*.tokens
+
+# Dev files
+node_modules/
+src/
+.git/
+*.log
+
+# Redundant PNG copies (dist/ copy is the one that matters)
+nodes/Missionize/missionize.png
+dist/missionize.png
+
+# Keep in package:
+# dist/credentials/MissionizeApi.credentials.js
+# dist/nodes/Missionize/Missionize.node.js
+# dist/nodes/Missionize/missionize.png
+# nodes/Missionize/Missionize.node.json
+# package.json
+# README.md
